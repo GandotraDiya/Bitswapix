@@ -1,0 +1,573 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitSwapix</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'ico/css/styles.css' %}">
+</head>
+<body>
+  <main class="main-container">
+        
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+        <div class="logo">Bitswapix</div>  
+        <ul class="nav-links" id="nav-links">
+          <li>
+            <a href="#">Buy crypto<i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown">
+              <li><a href="#">One-click</a></li>
+              <li><a href="#">P2P Express</a></li>
+              <li><a href="#">Crypto Deposit</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">Bits Token <i class="fas fa-chevron-down"></i></a>
+              <ul class="dropdown">
+                <li><a href="#">Earn Bits</a></li>
+                <li><a href="#">Buy Bits</a></li>
+              </ul>
+          </li>
+          <li>
+            <a href="#">Virtual Card </a>
+          </li>
+          <li>
+            <a href="#">Trade <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown">
+              <li><a href="#">Smart Swap</a></li>
+              <li><a href="#">Fast Swap</a></li>
+              <li><a href="#">Trade Bot</a></li>
+              <li><a href="#">Staking</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">My investments <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown">
+              <li><a href="#">My investments</a></li> 
+              <li><a href="#">Lending</a></li>
+              <li><a href="#">Trading Bot</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">More <i class="fas fa-chevron-down"></i></a>
+              <ul class="dropdown">
+                <li><a href="#">Subscription</a></li>
+                <li><a href="#">Referral Program</a></li>
+                <li><a href="#">Affiliate Program</a></li>
+                <li><a href="#">Blog</a></li>
+              </ul>
+          </li>
+        </ul>
+        <a href="#" class="cta-button">Get Started</a>
+      </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <h1>Next Gen AI Cryptohub</h1>
+    <p>$BITS is the utility token behind BitSwapix — a modular hub where AI, fintech, and Web3 converge. The presale is live — explore what powers the next evolution of digital finance.</p>
+    <a href="#" class="cta-button-2">Discover $BITS</a>
+  </section>
+  <!--Sub Hero-->
+  <div class="sub-hero">
+    <h1>$BITS Token is Live</h1>
+    <!--Timer-->
+    <div class="timer">
+      <div class="timer-item">
+        <span class="timer-label">Days</span>
+        <span class="timer-value" id="days">--</span>
+      </div>
+      <div class="timer-item">
+        <span class="timer-label">Hours</span>
+        <span class="timer-value" id="hours">--</span>
+      </div>
+      <div class="timer-item">
+        <span class="timer-label">Minutes</span>
+        <span class="timer-value" id="minutes">--</span>
+      </div>
+      <div class="timer-item">
+        <span class="timer-label">Seconds</span>
+        <span class="timer-value" id="seconds">--</span>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: {{ percent_filled|floatformat:2 }}%;">
+          <span class="stage-text">STAGE {{ stage }} — ${{ price }}</span>
+      </div>
+      <span class="raised-text">
+          Total Raised: ${{ total_raised|floatformat:2 }} / ${{ target|floatformat:0 }}
+      </span>
+    </div>
+   <!--Form-->
+   <form method="POST" novalidate>
+    {% csrf_token %}
+    <div class="form-container">
+  
+      <!-- Send Amount and Crypto -->
+      <div class="input-row">
+        <label><span>You send</span><span>Cryptocurrency</span></label>
+        <div class="input-group">
+          {{ purchase_form.amount }}
+          {{ purchase_form.crypto }}
+        </div>
+      </div>
+  
+      <!-- Promo Code and Bonus -->
+      <div class="input-row">
+        <label><span>Promo Code</span><span>Bonus</span></label>
+        <div class="input-group">
+          {{ purchase_form.promo_code }}
+          <input type="text" id="bonus_output" readonly value="{{ bonus_applied|default:0 }}%">
+        </div>
+      </div>
+  
+      <!-- You Get and After Presale -->
+      <div class="input-row">
+        <label><span>You get</span><span>After presale</span></label>
+        <div class="input-group">
+          <input type="text" id="you_get_output" readonly value="{{ calculated_tokens|default:'' }}">
+          <input type="text" id="after_presale_output" readonly value="${{ after_presale_value|default:'' }}">
+        </div>
+      </div>
+<!--   
+      <button type="submit">Buy Now</button> -->
+    </div>
+  </form>
+  
+
+      <!-- Payment Buttons -->
+      <div class="payment-buttons">
+        <button type="submit" class="crypto-btn"><i class="eth-icon"></i> Pay With Crypto</button>
+        <button type="button" class="card-btn"><i class="card-icon"></i> Pay With Card</button>
+      </div>
+
+      <!-- Confirm Button -->
+      <button type="submit" class="confirm-btn">Confirm</button>
+
+      <button type="button" class="how-btn">How to Get $BITS?</button>
+    </form>
+
+    <!-- Featured IN-->
+    <section class="featured"> 
+      <h2>Featured In</h2>
+      <div class="sub-featured">
+          <div class="marquee">
+              <div class="featured-logos">
+                  <span>Bitcoin.com</span>
+                  <span>cryptonews</span>
+                  <span>Techopedia</span>
+                  <span>yahoo/finance</span>
+                  <span>BITCOIN</span>
+              </div>
+          </div>
+      </div>
+      <p class="about-text">BitSwapix is a Hong Kong-based fintech startup, launched in 2022, empowering seamless crypto payments and innovative next-gen crypto solutions including crypto debit cards and AI-powered trading bots</p>
+    </section>
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">15,000+</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔁</div>
+                <div class="stat-value">$45M+</div>
+                <div class="stat-label">Transactions Processed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🍦</div>
+                <div class="stat-value">$3M+</div>
+                <div class="stat-label">Earned for users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🛡️</div>
+                <div class="stat-value">$7M+</div>
+                <div class="stat-label">Staked</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section class="featured tokenomics-section">
+      <div class="container">
+        <h2>Tokenomics</h2>    
+        <div class="tokenomics-content">
+          <!-- Pie Chart Container -->
+          <div class="chart-container">
+            <canvas id="tokenChart" width="300" height="300"></canvas>
+            <div class="chart-center">
+              <div class="total-supply"></div>
+              <div class="token-name"></div>
+            </div>
+          </div>      
+          <!-- Token Distribution Table -->
+          <div class="token-distribution">
+            <div class="distribution-column">
+              <div class="distribution-item" data-color="#7f8c4e">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Public Sale</span>
+                <span class="distribution-value">35% (350M)</span>
+              </div>
+              <div class="distribution-item" data-color="#6bc5cd">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Private Investors</span>
+                <span class="distribution-value">3% (30M)</span>
+              </div>
+              <div class="distribution-item" data-color="#00ff00">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Staking & Rewards</span>
+                <span class="distribution-value">10% (100M)</span>
+              </div>
+              <div class="distribution-item" data-color="#0000ff">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Airdrop & Incentives</span>
+                <span class="distribution-value">5% (50M)</span>
+              </div>
+              <div class="distribution-item" data-color="#fcd8b6">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Burn & Reserve</span>
+                <span class="distribution-value">3% (30M)</span>
+              </div>
+            </div>
+            
+            <div class="distribution-column">
+              <div class="distribution-item" data-color="#5d3654">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Team & Advisors</span>
+                <span class="distribution-value">15% (150M)</span>
+              </div>
+              <div class="distribution-item" data-color="#a073e5">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Liquidity Listings</span>
+                <span class="distribution-value">15% (150M)</span>
+              </div>
+              <div class="distribution-item" data-color="#7d3c3c">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Marketing</span>
+                <span class="distribution-value">10% (100M)</span>
+              </div>
+              <div class="distribution-item" data-color="#00ffb3">
+                <span class="color-dot"></span>
+                <span class="distribution-label">Ecosystem & Treasury</span>
+                <span class="distribution-value">7% (70M)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Roadmap Section -->
+    <section class="roadmap">
+      <h2>Roadmap</h2>
+      <div class="swiper roadmap-swiper">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide phase phase-1">
+                  <h3>Phase 1</h3>
+                  <ul>
+                      <li>Token Release</li>
+                      <li>Game Completion</li>
+                      <li>Bits Distribution</li>
+                      <li>Initial Price: $0.005</li>
+                  </ul>
+              </div>
+              <div class="swiper-slide phase phase-2">
+                  <h3>Phase 2</h3>
+                  <ul>
+                      <li>Increased Recognition</li>
+                      <li>Ethereum Blockchain Integration</li>
+                      <li>Solana Network Integration</li>
+                      <li>Community and Strategic Partnerships</li>
+                  </ul>
+              </div>
+              <div class="swiper-slide phase phase-3">
+                  <h3>Phase 3</h3>
+                  <ul>
+                      <li>DEX Listing at $0.10</li>
+                      <li>Improved AI Trading Bots</li>
+                      <li>Blockchain Expansion Development</li>
+                      <li>Mobile App Development</li>
+                  </ul>
+              </div>
+              <div class="swiper-slide phase phase-4">
+                  <h3>Phase 4</h3>
+                  <ul>
+                      <li>Secure NFC Cards</li>
+                      <li>Global Partnerships</li>
+                      <li>Mobile App Release</li>
+                      <li>Enhanced Security Features</li>
+                  </ul>
+              </div>
+              <div class="swiper-slide phase phase-5">
+                  <h3>Phase 5</h3>
+                  <ul>
+                      <li>Exchange Listings at $1</li>
+                      <li>Launch of BitSwapix Blockchain</li>
+                      <li>Full Exchanger Launch</li>
+                      <li>Global Adoption Campaign</li>
+                      <li>Cross-Platform Integration</li>
+                  </ul>
+              </div>
+          </div>
+          <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <!--Testimonials-->
+    <section class="testimonials">
+      <div class="container">
+        <h2>Recommended By</h2>
+        <div class="swiper-container testimonial-swiper">
+          <div class="swiper-wrapper">
+            <!-- Testimonial 1 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">L</div>
+                <div class="reviewer-info">
+                  <h4>Long</h4>
+                  <p>@long_techie</p>
+                </div>
+              </div>
+              <p class="review-text">BitSwapIs is a 15-year smooth interface, and I can't believe how fast the transactions are. I don't feel like I'm waiting forever anymore!</p>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">D</div>
+                <div class="reviewer-info">
+                  <h4>Danny</h4>
+                  <p>@dannycrypting</p>
+                </div>
+              </div>
+              <p class="review-text">Honestly, I didn't expect much at first, but BitSwapIs completely blew me away. The platform is smooth, intuitive, and the AI tools actually help me make better decisions.</p>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">J</div>
+                <div class="reviewer-info">
+                  <h4>James</h4>
+                  <p>@james.com</p>
+                </div>
+              </div>
+              <p class="review-text">BitSwapIs is perfect for Dell's stuff. I can buy, sell, and stake easily. Plus, their security's on point, totally recommend it to anyone starting out.</p>
+            </div>
+            <!-- Testimonial 4 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">E</div>
+                <div class="reviewer-info">
+                  <h4>Emily</h4>
+                  <p>@emly_crypto</p>
+                </div>
+              </div>
+              <p class="review-text">If you're into crypto, BitSwapIs is a MUST smooth, quick transaction and an easy interface. I'm always on it now. ❤️❤️</p>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="testimonials">
+      <div class="container">
+        <div class="swiper-container testimonial-swiper">
+          <div class="swiper-wrapper">
+            <!-- Testimonial 1 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">L</div>
+                <div class="reviewer-info">
+                  <h4>Long</h4>
+                  <p>@long_techie</p>
+                </div>
+              </div>
+              <p class="review-text">BitSwapIs is a 15-year smooth interface, and I can't believe how fast the transactions are. I don't feel like I'm waiting forever anymore!</p>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">D</div>
+                <div class="reviewer-info">
+                  <h4>Danny</h4>
+                  <p>@dannycrypting</p>
+                </div>
+              </div>
+              <p class="review-text">Honestly, I didn't expect much at first, but BitSwapIs completely blew me away. The platform is smooth, intuitive, and the AI tools actually help me make better decisions.</p>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">J</div>
+                <div class="reviewer-info">
+                  <h4>James</h4>
+                  <p>@james.com</p>
+                </div>
+              </div>
+              <p class="review-text">BitSwapIs is perfect for Dell's stuff. I can buy, sell, and stake easily. Plus, their security's on point, totally recommend it to anyone starting out.</p>
+            </div>
+            <!-- Testimonial 4 -->
+            <div class="swiper-slide review">
+              <div class="reviewer">
+                <div class="reviewer-avatar">E</div>
+                <div class="reviewer-info">
+                  <h4>Emily</h4>
+                  <p>@emly_crypto</p>
+                </div>
+              </div>
+              <p class="review-text">If you're into crypto, BitSwapIs is a MUST smooth, quick transaction and an easy interface. I'm always on it now. ❤️❤️</p>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <!--FAQ-->
+    <section class="faq-section">
+      <h2 class="faq-title">FAQ</h2>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span class="arrow">→</span> What is BitSwapix?
+        </button>
+        <div class="faq-answer">
+          BitSwapix is a next-generation crypto platform focused on seamless trading and DeFi features.
+        </div>
+      </div>
+    
+      <div class="faq-item">
+        <button class="faq-question">
+          <span class="arrow">→</span> How can I participate in the token presale?
+        </button>
+        <div class="faq-answer">
+          <p>There are two ways to participate in the presale:</p>
+          <p><strong>Method 1:</strong></p>
+          <ol>
+            <li>Create an account on the BitSwapix platform.</li>
+            <li>Fund your wallet with crypto or fiat (BTC, ETH, USDT, USD, EUR).</li>
+            <li>Purchase tokens from the presale section.</li>
+          </ol>
+          <p><strong>Method 2:</strong></p>
+          <ol>
+            <li>Go to the presale page and click 'Explore $BITS Now'.</li>
+            <li>Choose a payment method (crypto or card/transfer).</li>
+            <li>Create an account and buy tokens.</li>
+          </ol>
+        </div>
+      </div>
+    
+      <div class="faq-item">
+        <button class="faq-question">
+          <span class="arrow">→</span> What is the current price of BitSwapix tokens and how will it change?
+        </button>
+        <div class="faq-answer">
+          The price of BitSwapix tokens will increase in each phase of the presale. Exact values can be found on our tokenomics page.
+        </div>
+      </div>
+    
+      <div class="faq-item">
+        <button class="faq-question">
+          <span class="arrow">→</span> What is the token usability within the BitSwapix platform?
+        </button>
+        <div class="faq-answer">
+          BitSwapix tokens can be used for staking, trading, governance, and accessing platform features and benefits.
+        </div>
+      </div>
+    </section>
+    <!-- Newsletter-->
+    <section class="newsletter-section">
+      <img src="logo.png" alt="Logo" class="newsletter-logo" />
+      <h2 class="newsletter-title">SIGN UP FOR NEWSLETTER</h2>
+      <div class="newsletter-wrapper">
+        <form class="newsletter-form" method="POST" novalidate>
+          {% csrf_token %}
+          {{ form.email }}
+          <button type="submit">Join Us</button>
+        </form>
+        {% if message %}
+        <p style="margin-top: 10px; color: #b0ff59;">{{ message }}</p>
+        {% endif %}
+        <div class="divider"><span>OR</span></div>
+        <div class="newsletter-icons">
+          <a href="#" class="icon-wrapper">
+            <img src="telegram-icon.png" alt="Telegram" />
+          </a>
+          <a href="#" class="icon-wrapper">
+            <img src="x-icon.png" alt="X" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+        <!-- Footer CTA -->
+        <section class="footer-cta">
+          <div class="text-content">
+              <h2>Earn up to 8,375 USDT in a process of using BitSwapix CryptoHub</h2>
+              <p>Discover how specific cryptocurrencies work – and get a bit of each crypto to try out for yourself.</p>
+          </div>
+              <a href="#" class="btn-cta">Create Account</a>
+        </section>
+
+    <!-- Footer Main -->
+    <footer class="footer-main">
+      <div class="container">
+          <div class="footer-content">
+              <div class="footer-contact">
+                  <h3>BitSwapix</h3>
+                  <p><strong>Let's talk</strong><br>
+                  <a href="mailto:help@bitswapix.com">help@bitswapix.com</a></p>
+              </div>
+              <div class="footer-links">
+                  <h3>Products</h3>
+                  <ul>
+                      <li><a href="#">Virtual Card</a></li>
+                      <li><a href="#">Exchange</a></li>
+                      <li><a href="#">Smart Swap</a></li>
+                  </ul>
+              </div>
+              <div class="footer-links">
+                  <h3>Services</h3>
+                  <ul>
+                      <li><a href="#">Staking</a></li>
+                      <li><a href="#">Referral Program</a></li>
+                      <li><a href="#">Ambassador Program</a></li>
+                  </ul>
+              </div>
+              <div class="footer-links">
+                  <h3>Support</h3>
+                  <ul>
+                      <li><a href="#">Trading Rules</a></li>
+                      <li><a href="#">Help center</a></li>
+                      <li><a href="#">Feedback</a></li>
+                  </ul>
+              </div>
+              <div class="footer-links">
+                  <h3>About us</h3>
+                  <ul>
+                      <li><a href="#">About BitSwapix</a></li>
+                      <li><a href="#">Privacy Policy</a></li>
+                  </ul>
+              </div>
+          </div>
+          <div class="footer-bottom">
+              <p>Copyright © 2023 BitSwapix Limited. All rights reserved. [Company Number: 3338401] Registered in Hong Kong.</p>
+          </div>
+      </div>
+  </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    const deadline = new Date("{{ deadline|safe }}");
+    console.log("Deadline is:", deadline);
+  </script>
+  <script src="{% static 'ico/js/script.js' %}"></script>
+</body>
+</html>
